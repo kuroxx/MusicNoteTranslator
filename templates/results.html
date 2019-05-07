@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="container-fluid">
+  <!-- <div class="container-fluid">
     <a href="/results/0">
       <button type="button" class="btn btn-outline-dark">
         Letter (C D E)
@@ -35,9 +35,8 @@
         Cipher (1 2 3)
       </button>
     </a>
-
   </div>
-  <br>
+  <br> -->
 
   <div class="container-fluid">
     <img src={{imgpath}}>
@@ -46,7 +45,7 @@
   <br><br>
   <!-- Predict message -->
   <div class="container-fluid">
-    <h5>Sheet prediction:</h5>
+    <h3>Sheet prediction:</h3>
     <p>
       {% for key, value in results.items() %}
       {{ value }} <br>
@@ -56,7 +55,7 @@
 
   <!-- Translate message -->
   <div class="container-fluid">
-    <h5>Translation:</h5>
+    <h3>Translation:</h3>
     <p>
       {% for val in translationResults %}
       {{ val }}

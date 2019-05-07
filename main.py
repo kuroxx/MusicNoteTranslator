@@ -94,7 +94,7 @@ def display_results(notation=0):
         break
       elif (splitResults[i][0] == k):
         musicSymbolsDict[k].append(splitResults[i][1])
-  # print(musicSymbolsDict)
+  print(musicSymbolsDict)
 
   # Translate Notes
 
@@ -136,8 +136,6 @@ def display_results(notation=0):
         # translationResults['2'].append(musicNotesDict[k][2])
 
   print (translationResults)
-
-  print(notation)
 
   return render_template('results.html', results=results, imgpath=imgpath, translationResults=translationResults)
 

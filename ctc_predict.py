@@ -75,4 +75,4 @@ def main(image_path):
   pickle.dump( results_dic, open( "save.p", "wb" ) )
 
   # print(predicted_results)
-  # print(results_dic)
+  print(results_dic)
