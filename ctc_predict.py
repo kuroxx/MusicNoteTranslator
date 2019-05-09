@@ -1,29 +1,41 @@
+'''
+This code was originally developed by Jorge Calvo Zaragoza:
+https://github.com/calvozaragoza/tf-deep-omr
+It was used for experiments detailed in this paper: 
+https://www.mdpi.com/2076-3417/8/4/606
+
+Modifications to the code have been applied to be used for the project: MusicNoteTranslator
+'''
+
 import argparse
 import tensorflow as tf
 import ctc_utils
 import cv2
 import numpy as np
-
 import pickle
 
-#image_path = 'Data/Example/000051652-1_2_1.png'
 model_path = 'Models/semantic_model.meta'
 voc_path = 'Data/vocabulary_semantic.txt'
 predicted_results = []
-# predicted_results = {}
 results_dic = {}
 
 def main(image_path):
+  """
+  Runs TF model to get predictions and saves it to a dictionary.
+
+  :param str image_path: The path to the image
+  """
+
   tf.reset_default_graph()
   sess = tf.InteractiveSession()
 
-  # Creates a dictionary to map index to words in the vocab
-  dict_file = open(voc_path,'r') # open .txt file
-  dict_list = dict_file.read().splitlines() # read .txt file and returns list with all the lines in string
-  int2word = dict() # create dictionary 
+  # Map index to words in the vocab
+  dict_file = open(voc_path,'r') 
+  dict_list = dict_file.read().splitlines() 
+  int2word = dict() 
   for word in dict_list:
-      word_idx = len(int2word) # gets word index
-      int2word[word_idx] = word # assigns index to word in the dictionary
+      word_idx = len(int2word) 
+      int2word[word_idx] = word 
   dict_file.close()
 
   # Restore weights
@@ -59,20 +71,12 @@ def main(image_path):
                         })
 
   str_predictions = ctc_utils.sparse_tensor_to_strs(prediction)
-  # print(str_predictions)
-  # print(len(str_predictions[0]))
 
   for w in str_predictions[0]:
       predicted_results.append(int2word[w]) 
 
-      # creates dict using key id from predictions and maps it to the word values
+      # Map prediction key ids to words
       results_dic = dict(zip(str_predictions[0], predicted_results))
       
-      # print (int2word[w]),
-      # print ('\t')
-
-  # Saves dict in a pickle file
   pickle.dump( results_dic, open( "save.p", "wb" ) )
-
-  # print(predicted_results)
   print(results_dic)

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import flask
 from flask import Flask, render_template, request
 from flask import redirect, url_for, flash
 from flask_wtf import FlaskForm
@@ -17,54 +16,53 @@ UPLOAD_FOLDER = 'static/images/'
 temp_filenames = [""]
 
 class UploadForm(FlaskForm):
-  # Checks file is a non-empty instance of FileStorage, otherwise data will be None.
   file = FileField(validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
-
-class TranslateForm(FlaskForm):
-  submit = SubmitField('Translate')
 
 @app.route("/")
 @app.route("/index")
 def index():
-  return flask.render_template('index.html')
+  """
+  Returns index page.
+  """
+  return render_template('index.html')
 
 @app.route('/predict', methods=['GET', 'POST'])
 def upload_file():
+  """
+  Returns flask form once it has been validated.
+  """
+
   form = UploadForm()
   
   if form.validate_on_submit():
-    # Uploads and save file 
     filename = secure_filename(form.file.data.filename)
     form.file.data.save(UPLOAD_FOLDER + filename)
     flash('File "{}" successfully uploaded'.format(filename))
     
-    # Adds filename string to the array caled temp_filenames
-    temp_filenames.append(str(filename))
-    # print(temp_filenames)
+    temp_filenames.append(filename)
 
-    # Runs tf model on uploaded file
+    # Run tf model
     predict.main(UPLOAD_FOLDER + filename)
 
     return redirect(url_for('display_results'))
-
   return render_template('file_upload.html', form=form)
 
 @app.route('/results')
 @app.route('/results/<notation>')
 def display_results(notation=0):
+  """
+  Returns image path, prediction and translation results.
+  """
 
   # Define image path
   if len(temp_filenames) == 0 :
     imgpath = ''
   else:
     imgpath = UPLOAD_FOLDER + temp_filenames[-1]  
-  # print(imgpath)
 
-  # Load results dictionary    
-  results = pickle.load( open( "save.p", "rb" ) )
-  # print(results)
+  # Load dictionary    
+  predictionResults = pickle.load( open( "save.p", "rb" ) )
   
-  # 8 types
   musicSymbolsDict = {
     "barline": [], 
     "clef": [], 
@@ -78,15 +76,12 @@ def display_results(notation=0):
   
   musicSymbolsKeyList = ["barline", "clef", "timeSignature", "keySignature", "rest", "multirest", "note", "gracenote"]
 
-  # Stores list of split strings array
   splitResults = []
 
-  # Adds split strings to an array
-  for i in results.keys():
-    splitResults.append(results[i].rsplit('-', 1))
-  # print(splitResults)
+  for i in predictionResults.keys():
+    splitResults.append(predictionResults[i].rsplit('-', 1))
 
-  # Categorises note symbols
+  # Categorise note symbols
   for i in range(len(splitResults)):
     for k in musicSymbolsKeyList:
       if (splitResults[i][0] == "barline"):
@@ -94,11 +89,8 @@ def display_results(notation=0):
         break
       elif (splitResults[i][0] == k):
         musicSymbolsDict[k].append(splitResults[i][1])
-  print(musicSymbolsDict)
+  # print(musicSymbolsDict)
 
-  # Translate Notes
-
-  # 7 Notes
   musicNotesDict = {
     "A" : ["A", "La", "6"],
     "B" : ["B", "Ti", "7"],
@@ -111,21 +103,16 @@ def display_results(notation=0):
 
   musicNotesKeyList = ["A", "B", "C", "D", "E", "F", "G"]
 
-  # 0 = Letter, 1 = Solfege, 2 = Cipher
-
   splitNotes = []
   translationResults = []
 
-  # translationResults = {'0':[],'1':[],'2':[]}
-
+  # 0 = Letter, 1 = Solfege, 2 = Cipher
   notation = 1
 
-  # Stores list of split strings in array
   for i in range(len(musicSymbolsDict["note"])):
     splitNotes.append(musicSymbolsDict["note"][i].rsplit("_", 1))
-  # print(splitNotes)
 
-  # Read and translate note, then add to array
+  # Add translated note
   for i in range(len(splitNotes)):
     for k in musicNotesKeyList:
       if (splitNotes[i][0][:1] == k) :
@@ -137,16 +124,14 @@ def display_results(notation=0):
 
   print (translationResults)
 
-  return render_template('results.html', results=results, imgpath=imgpath, translationResults=translationResults)
-
-@app.route('/test')
-@app.route('/test/<username>')
-def test(username="no"):
-  return 'User %s' % username
+  return render_template('results.html', predictionResults=predictionResults, imgpath=imgpath, translationResults=translationResults)
 
 @app.route('/camera')
 @app.route('/handwrite')
 def temp():
+  """
+  Temporary placeholder for future features.
+  """
   return render_template('temp.html')
 
 if __name__ == '__main__':
