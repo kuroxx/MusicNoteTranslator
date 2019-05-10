@@ -14,7 +14,7 @@ from main_utils import create_imgpath, split_strings, categorise_symbols
 app = Flask(__name__)
 app.secret_key = '5236f7f7898da7adf878a072baf96bb1254627050c8c4c91'
 UPLOAD_FOLDER = 'static/images/'
-tempFilenames = [""]
+temp_filenames = [""]
 
 class UploadForm(FlaskForm):
   file = FileField(validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
@@ -36,7 +36,7 @@ def upload_file():
     form.file.data.save(UPLOAD_FOLDER + filename)
     flash('File "{}" successfully uploaded'.format(filename))
     
-    tempFilenames.append(filename)
+    temp_filenames.append(filename)
 
     # Run tf model
     predict.main(UPLOAD_FOLDER + filename)
@@ -49,7 +49,7 @@ def upload_file():
 def display_results(notation=0):
   """Translates and displays image, prediction and translation results."""
 
-  musicSymbolsDict = {
+  symbols_dict = {
     "barline": [], 
     "clef": [], 
     "timeSignature": [], 
@@ -60,15 +60,15 @@ def display_results(notation=0):
     "gracenote": []
     }
   
-  musicSymbolsKeyList = ["barline", "clef", "timeSignature", "keySignature", "rest", "multirest", "note", "gracenote"]
+  symbols_key_list = ["barline", "clef", "timeSignature", "keySignature", "rest", "multirest", "note", "gracenote"]
   
   # Load dictionary    
-  predictionResults = pickle.load( open( "save.p", "rb" ) )
+  prediction_results = pickle.load( open( "save.p", "rb" ) )
 
-  splitArr1 = split_strings(predictionResults.keys(), predictionResults, '-')
-  categorise_symbols(splitArr1, musicSymbolsKeyList, musicSymbolsDict, 1)
+  split_Arr1 = split_strings(prediction_results.keys(), prediction_results, '-')
+  categorise_symbols(split_Arr1, symbols_key_list, symbols_dict, 1)
 
-  musicNotesDict = {
+  notes_dict = {
     "A" : ["A", "La", "6"],
     "B" : ["B", "Ti", "7"],
     "C" : ["C", "Do", "1"],
@@ -78,27 +78,27 @@ def display_results(notation=0):
     "G" : ["G", "So", "5"],     
   }
 
-  musicNotesKeyList = ["A", "B", "C", "D", "E", "F", "G"]
-  translationResults = []
+  notes_key_list = ["A", "B", "C", "D", "E", "F", "G"]
+  translation_results = []
   notation = 1  # 0 = Letter, 1 = Solfege, 2 = Cipher
 
-  noteDictRange = range(len(musicSymbolsDict["note"]))
-  splitArr2 = split_strings(noteDictRange, musicSymbolsDict["note"], '_')
+  notes_dict_range = range(len(symbols_dict["note"]))
+  split_Arr2 = split_strings(notes_dict_range, symbols_dict["note"], '_')
 
   # Categorise and translate notes
-  for i in range(len(splitArr2)):
-    for k in musicNotesKeyList:
-      if (splitArr2[i][0][:1] == k) :
-        translationResults.append(musicNotesDict[k][notation])        
-        # translationResults['0'].append(musicNotesDict[k][0])
-        # translationResults['1'].append(musicNotesDict[k][1])
-        # translationResults['2'].append(musicNotesDict[k][2])
+  for i in range(len(split_Arr2)):
+    for k in notes_key_list:
+      if (split_Arr2[i][0][:1] == k) :
+        translation_results.append(notes_dict[k][notation])        
+        # translation_results['0'].append(notes_dict[k][0])
+        # translation_results['1'].append(notes_dict[k][1])
+        # translation_results['2'].append(notes_dict[k][2])
 
-  # print (translationResults)
+  # print (translation_results)
 
-  imgpath = create_imgpath(tempFilenames, UPLOAD_FOLDER)
+  imgpath = create_imgpath(temp_filenames, UPLOAD_FOLDER)
 
-  return render_template('results.html', imgpath=imgpath, predictionResults=predictionResults, translationResults=translationResults)
+  return render_template('results.html', imgpath=imgpath, prediction_results=prediction_results, translation_results=translation_results)
 
 @app.route('/camera')
 @app.route('/handwrite')

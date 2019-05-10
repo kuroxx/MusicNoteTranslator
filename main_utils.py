@@ -2,40 +2,56 @@
 main_utils.py contains useful functions required in the main Flask app.
 """
 
-def create_imgpath(filenameArr, UPLOAD_FOLDER):
-  if len(filenameArr) == 0 :
+def create_imgpath(filename_arr, UPLOAD_FOLDER):
+  """
+  Creates path to image.
+
+  :param filename_arr str: Array containing lits of filenames.
+  :param UPLOAD_FOLDER str: Path to folder where image should be saved.
+  :return: String of the image path.
+  """
+  if len(filename_arr) == 0 :
     imgpath = ''
   else:
-    imgpath = UPLOAD_FOLDER + filenameArr[-1]  
+    imgpath = UPLOAD_FOLDER + filename_arr[-1]  
 
   return imgpath
 
-def split_strings(listRange, stringsDict, delim):
+def split_strings(key_list, strings_dict, delim):
   """
   Splits strings in a dictionary.
   
-  :param listRange str: List of keys to iterate over.
-  :param stringsDict str: Dictionary of strings to split.
+  :param key_list str: List of keys to iterate over.
+  :param strings_dict str: Dictionary of strings to split.
   :param delim str: Delimiter for splitting the string.
   :return: Array of the split strings.
   """
   splitResultsArr = []
 
-  for x in listRange:
-    splitResultsArr.append(stringsDict[x].rsplit(delim, 1))
+  for x in key_list:
+    splitResultsArr.append(strings_dict[x].rsplit(delim, 1))
 
   return splitResultsArr
 
-def categorise_symbols(splitStrDict, keyList, resultsDict, arrIndex):
-  for i in range(len(splitStrDict)):
-    for k in keyList:
-      if (splitStrDict[i][0] == "barline"):
-        resultsDict["barline"].append(splitStrDict[i][0])
-        break
-      elif (splitStrDict[i][0] == k):
-        resultsDict[k].append(splitStrDict[i][arrIndex])
+def categorise_symbols(unsorted_dict, key_list, results_dict, arr_index):
+  """
+  Categorise items in a dictionary.
 
-  return resultsDict  
+  :param unsorted_dict str: Dictionary of unsorted items.
+  :param key_list str: List of keys to iterate over.
+  :param results_dict str: Dictionary with predefined key categories to append new items to.
+  :param arr_index int: Indicates which index value of the array to append to the dictionary.
+  :return: Dictionary with categorised items.
+  """
+  for i in range(len(unsorted_dict)):
+    for k in key_list:
+      if (unsorted_dict[i][0] == "barline"):
+        results_dict["barline"].append(unsorted_dict[i][0])
+        break
+      elif (unsorted_dict[i][0] == k):
+        results_dict[k].append(unsorted_dict[i][arr_index])
+
+  return results_dict  
 
   # categorise_symbols(splitNotes, musicNotesKeyList, translationResults, notation)
   # # Add translated note

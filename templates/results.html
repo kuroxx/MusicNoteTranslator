@@ -47,7 +47,7 @@
   <div class="container-fluid">
     <h3>Sheet prediction:</h3>
     <p>
-      {% for key, value in predictionResults.items() %}
+      {% for key, value in prediction_results.items() %}
       {{ value }} <br>
       {% endfor %}
     </p>
@@ -57,7 +57,7 @@
   <div class="container-fluid">
     <h3>Translation:</h3>
     <p>
-      {% for val in translationResults %}
+      {% for val in translation_results %}
       {{ val }}
       {% endfor %}
     </p>
