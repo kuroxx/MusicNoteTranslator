@@ -11,7 +11,6 @@
 
   <p>
     <p style="text-decoration: underline;">How to use:</p>
-
     <ul>
       <li>Click browse </li>
       <li>Choose your monophonic music score sheet to upload</li>
@@ -25,32 +24,22 @@
   <br>
   <hr>
 
-  <!-- Flash message -->
-  <div class="container-fluid">
-    {% for category, message in get_flashed_messages(with_categories=true) %}
-    <div class="flashes alert alert-primary" role="alert">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <p>{{ message }}</p>
-      {% endfor %}
-    </div>
-  </div>
-
   <!-- Form to upload file -->
   <div class="container-fluid">
     <form method="post" enctype="multipart/form-data">
       {{ form.hidden_tag() }}
       {{ form.file }}
-      <input type="submit" value="Predict" class="btn btn-outline-primary">
+      <input type="submit" value="Predict" class="btn btn-outline-primary" onclick="loading();">
     </form>
   </div>
   <hr>
+  
+  <div id="loading"></div>
 
   <!-- Go back to index -->
   <div class="container">
     <a href="/">Back</a>
   </div>
-
-
 </div>
 
 {% endblock %}
