@@ -9,19 +9,30 @@
   </h4>
   <hr>
 
-  <p>
-    <p style="text-decoration: underline;">How to use:</p>
-    <ul>
-      <li>Click browse </li>
-      <li>Choose your monophonic music score sheet to upload</li>
-      <li>Click predict</li>
-    </ul>
+  <!-- Flash message -->
+  <div class="container-fluid">
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+    <div class="flashes alert alert-primary" role="alert">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  </div>
 
-    <p style="font-style: italic;">
-      *NB: Please only use the following file types: .jpg .png .jpeg</li>
+  <div class="container-fluid">
+    <p>
+      <p style="text-decoration: underline;">How to use:</p>
+      <ul>
+        <li>Click browse </li>
+        <li>Choose music score to upload</li>
+        <li>Click translate</li>
+      </ul>
+
+      <p style="font-style: italic;">
+        *NB: Please only use the following file types: .jpg .png .jpeg</li>
+      </p>
     </p>
-  </p>
-  <br>
+  </div>
   <hr>
 
   <!-- Form to upload file -->
@@ -29,11 +40,11 @@
     <form method="post" enctype="multipart/form-data">
       {{ form.hidden_tag() }}
       {{ form.file }}
-      <input type="submit" value="Predict" class="btn btn-outline-primary" onclick="loading();">
+      <input type="submit" value="Translate" class="btn btn-outline-primary" onclick="loading();">
     </form>
   </div>
   <hr>
-  
+
   <div id="loading"></div>
 
   <!-- Go back to index -->

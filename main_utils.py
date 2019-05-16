@@ -17,19 +17,19 @@ def create_imgpath(filename_arr, UPLOAD_FOLDER):
 
   return imgpath
 
-def split_strings(key_list, strings_dict, delim):
+def split_strings(key_list, strings_to_split, delim):
   """
   Splits strings in a dictionary.
   
   :param key_list str: List of keys to iterate over.
-  :param strings_dict str: Dictionary of strings to split.
+  :param strings_to_split str: Dictionary of strings to split.
   :param delim str: Delimiter for splitting the string.
   :return: Array of the split strings.
   """
   splitResultsArr = []
 
   for x in key_list:
-    splitResultsArr.append(strings_dict[x].rsplit(delim, 1))
+    splitResultsArr.append(strings_to_split[x].rsplit(delim, 1))
 
   return splitResultsArr
 
@@ -53,25 +53,21 @@ def categorise_symbols(unsorted_dict, key_list, results_dict, arr_index):
 
   return results_dict  
 
-  # categorise_symbols(splitNotes, musicNotesKeyList, translationResults, notation)
-  # # Add translated note
-  # for i in range(len(splitNotes)):
-  #   for k in musicNotesKeyList:
-  #     if (splitNotes[i][0][:1] == k) :
-  #       translationResults.append(musicNotesDict[k][notation])
+def translate_notes(arr_to_translate, key_list, translation_reference, notation):
+  """
+  Creates new array with translated items.
 
-  #       # translationResults['0'].append(musicNotesDict[k][0])
-  #       # translationResults['1'].append(musicNotesDict[k][1])
-  #       # translationResults['2'].append(musicNotesDict[k][2])
+  :param arr_to_translate str: Array of items to translate. 
+  :param key_list str: List of keys to iterate over.
+  :param translation_reference str: Dictionary containing reference for translations.
+  :param notation int: Indicates which index position to reference translation from dictionary. 
+  :return: Array with translated items.
+  """
+  translation_results = []
 
+  for i in range(len(arr_to_translate)):
+    for k in key_list:
+      if (arr_to_translate[i][0][:1] == k) :
+        translation_results.append(translation_reference[k][notation])        
 
-  # categorise_symbols(splitResults, musicSymbolsKeyList, musicSymbolsDict, 1)
-
-  #   # Categorise note symbols
-  # for i in range(len(splitResults)):
-  #   for k in musicSymbolsKeyList:
-  #     if (splitResults[i][0] == "barline"):
-  #       musicSymbolsDict["barline"].append(splitResults[i][0])
-  #       break
-  #     elif (splitResults[i][0] == k):
-  #       musicSymbolsDict[k].append(splitResults[i][1])
+  return translation_results 

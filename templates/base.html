@@ -11,7 +11,7 @@
     integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-  <style type="text/css">
+  <style>
     div#loading {
       width: 50px;
       height: 35px;
@@ -20,6 +20,15 @@
       margin-bottom: 5px;
       background: url(/static/ajax-loader.gif) no-repeat;
       cursor: wait;
+    }
+
+    .buttons a {
+      font-size: 16px;
+    }
+
+    .buttons a:hover {
+      cursor: pointer;
+      font-size: 16px;
     }
   </style>
 </head>
@@ -41,11 +50,39 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
     integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous">
   </script>
-  <script type="text/javascript">
+
+  <script>
     function loading() {
       $("#loading").show();
     }
+
+    // The following code was adapted from: https://stackoverflow.com/questions/31799603/show-hide-multiple-divs-javascript
+    var divs = ["Div1", "Div2", "Div3"];
+    var visibleDivId = null;
+
+    function showDiv(divId) {
+      if (visibleDivId === divId) {
+        visibleDivId = null;
+      } else {
+        visibleDivId = divId;
+      }
+      hideNonVisibleDivs();
+    }
+
+    function hideNonVisibleDivs() {
+      var i, divId, div;
+      for (i = 0; i < divs.length; i++) {
+        divId = divs[i];
+        div = document.getElementById(divId);
+        if (visibleDivId === divId) {
+          div.style.display = "block";
+        } else {
+          div.style.display = "none";
+        }
+      }
+    }
   </script>
+
 </body>
 
 </html>

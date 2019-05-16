@@ -19,24 +19,18 @@
     </div>
   </div>
 
-  <!-- <div class="container-fluid">
-    <a href="/results/0">
-      <button type="button" class="btn btn-outline-dark">
-        Letter (C D E)
-      </button>
-    </a>
-    <a href="/results/1">
-      <button type="button" class="btn btn-outline-dark">
-        Solfege (Do Re Mi)
-      </button>
-    </a>
-    <a href="/results/2">
-      <button type="button" class="btn btn-outline-dark">
-        Cipher (1 2 3)
-      </button>
-    </a>
+  <div class="container-fluid">
+    <button type="button" class="btn btn-outline-dark" onclick="showDiv('Div1');">
+      Letter (C D E)
+    </button>
+    <button type="button" class="btn btn-outline-dark" onclick="showDiv('Div2');">
+      Solfege (Do Re Mi)
+    </button>
+    <button type="button" class="btn btn-outline-dark" onclick="showDiv('Div3');">
+      Cipher (1 2 3)
+    </button>
   </div>
-  <br> -->
+  <br>
 
   <div class="container-fluid">
     <img src={{imgpath}}>
@@ -56,8 +50,18 @@
   <!-- Translate message -->
   <div class="container-fluid">
     <h3>Translation:</h3>
-    <p>
-      {% for val in translation_results %}
+    <p id="Div1">
+      {% for val in translation_let %}
+      {{ val }}
+      {% endfor %}
+    </p>
+    <p id="Div2" style="display: none;">
+      {% for val in translation_sol %}
+      {{ val }}
+      {% endfor %}
+    </p>
+    <p id="Div3" style="display: none;">
+      {% for val in translation_num %}
       {{ val }}
       {% endfor %}
     </p>

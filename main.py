@@ -9,7 +9,7 @@ from wtforms import SubmitField
 from wtforms import validators
 import pickle
 import ctc_predict as predict
-from main_utils import create_imgpath, split_strings, categorise_symbols
+from main_utils import create_imgpath, split_strings, categorise_symbols, translate_notes
 
 app = Flask(__name__)
 app.secret_key = '5236f7f7898da7adf878a072baf96bb1254627050c8c4c91'
@@ -30,7 +30,7 @@ def upload_file():
   """Runs TF model if flask form is valid on submit."""
 
   form = UploadForm()
-  
+
   if form.validate_on_submit():
     filename = secure_filename(form.file.data.filename)
     form.file.data.save(UPLOAD_FOLDER + filename)
@@ -79,26 +79,19 @@ def display_results(notation=0):
   }
 
   notes_key_list = ["A", "B", "C", "D", "E", "F", "G"]
-  translation_results = []
-  notation = 1  # 0 = Letter, 1 = Solfege, 2 = Cipher
 
+  # Split dictionary strings
   notes_dict_range = range(len(symbols_dict["note"]))
   split_Arr2 = split_strings(notes_dict_range, symbols_dict["note"], '_')
 
   # Categorise and translate notes
-  for i in range(len(split_Arr2)):
-    for k in notes_key_list:
-      if (split_Arr2[i][0][:1] == k) :
-        translation_results.append(notes_dict[k][notation])        
-        # translation_results['0'].append(notes_dict[k][0])
-        # translation_results['1'].append(notes_dict[k][1])
-        # translation_results['2'].append(notes_dict[k][2])
-
-  # print (translation_results)
+  translation_let = translate_notes(split_Arr2, notes_key_list, notes_dict, 0)
+  translation_sol = translate_notes(split_Arr2, notes_key_list, notes_dict, 1)
+  translation_num = translate_notes(split_Arr2, notes_key_list, notes_dict, 2)
 
   imgpath = create_imgpath(temp_filenames, UPLOAD_FOLDER)
 
-  return render_template('results.html', imgpath=imgpath, prediction_results=prediction_results, translation_results=translation_results)
+  return render_template('results.html', imgpath=imgpath, prediction_results=prediction_results, translation_let=translation_let, translation_sol=translation_sol, translation_num=translation_num)
 
 @app.route('/camera')
 @app.route('/handwrite')
