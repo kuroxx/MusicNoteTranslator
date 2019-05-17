@@ -39,6 +39,14 @@ Run this project by typing the following in terminal:
 python main.py
 ```
 
+## Testing
+
+To run unittest on code, type the following in the Terminal:
+
+```
+python -m unittest tests/test.py 
+```
+
 # Built With
 
 - [Flask](http://flask.pocoo.org/) - Python microframework 

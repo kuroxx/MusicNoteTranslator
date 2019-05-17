@@ -2,6 +2,8 @@
 main_utils.py contains useful functions required in the main Flask app.
 """
 
+import sys
+
 def create_imgpath(filename_arr, UPLOAD_FOLDER):
   """
   Creates path to image.
@@ -28,6 +30,9 @@ def split_strings(key_list, strings_to_split, delim):
   """
   splitResultsArr = []
 
+  # if(type(strings_to_split) != 'str'):
+  #   raise ValueError('Array values needs to be string!')
+  # else:
   for x in key_list:
     splitResultsArr.append(strings_to_split[x].rsplit(delim, 1))
 
@@ -50,7 +55,6 @@ def categorise_symbols(unsorted_dict, key_list, results_dict, arr_index):
         break
       elif (unsorted_dict[i][0] == k):
         results_dict[k].append(unsorted_dict[i][arr_index])
-
   return results_dict  
 
 def translate_notes(arr_to_translate, key_list, translation_reference, notation):
