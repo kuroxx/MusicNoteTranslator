@@ -1,11 +1,11 @@
-'''
+"""
 This code was originally developed by Jorge Calvo Zaragoza:
 https://github.com/calvozaragoza/tf-deep-omr
 It was used for experiments detailed in this paper: 
 https://www.mdpi.com/2076-3417/8/4/606
 
 Modifications to the code have been applied to be used for the project: MusicNoteTranslator
-'''
+"""
 
 import argparse
 import tensorflow as tf
@@ -23,7 +23,8 @@ def main(image_path):
   """
   Runs TF model to get predictions and saves it to a dictionary.
 
-  :param str image_path: The path to the image
+  :param image_path str: The path to the image.
+  :return: Nothing.
   """
 
   tf.reset_default_graph()
